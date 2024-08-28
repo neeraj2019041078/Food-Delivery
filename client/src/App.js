@@ -11,6 +11,7 @@ import FoodListing from "./pages/FoodListing";
 import FoodDetails from "./pages/FoodDetails";
 import { useSelector } from "react-redux";
 import Contact from "./components/Contact";
+import OrderConfirmation from "./components/OrderConfirmation";
 // import Order from "./components/Order";
 const Container = styled.div``;
 
@@ -34,6 +35,7 @@ function App() {
             <Route path="/dishes"  element={<FoodListing />} />
             <Route path="/contact"  element={<Contact />} />
             {/* <Route path="/order-details/:orderId" element={<OrderDetails />} /> */}
+            <Route path="/orders" element={<OrderConfirmation />} />
           
           </Routes>
           {openAuth && (

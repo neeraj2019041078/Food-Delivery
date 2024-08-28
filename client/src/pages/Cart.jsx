@@ -5,11 +5,12 @@ import Button from "../components/Button";
 import { addToCart, deleteFromCart, getCart, placeOrder } from "../api";
 import { useNavigate } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch , useSelector } from "react-redux";
 import { openSnackbar } from "../redux/reducers/SnackbarSlice";
 import { DeleteOutline } from "@mui/icons-material";
-// import { Elements } from '@stripe/react-stripe-js';
-// import { loadStripe } from '@stripe/stripe-js';
+import { setCurrentOrder } from "../redux/reducers/orderSlice";
+import { addOrder } from "../redux/reducers/orderSlice";
+
 
 const Container = styled.div`
   padding: 20px 30px;
@@ -150,6 +151,7 @@ const Cart = () => {
     phoneNumber: "",
     completeAddress: "",
   });
+  // const currentOrder = useSelector((state) => state.order.currentOrder);
 
   const getProducts = async () => {
     setLoading(true);
@@ -199,16 +201,26 @@ const Cart = () => {
         totalAmount,
       };
 
-      await placeOrder(token, orderDetails);
+      const response=await placeOrder(token, orderDetails);
+      // console.log("respone hello",response)
+      const order=response.data.order;
+      console.log("Order from API:", order); 
+
       dispatch(
         openSnackbar({
           message: "Order placed successfully",
           severity: "success",
         })
       );
+      dispatch(addOrder(order)); 
+      dispatch(setCurrentOrder(order));
+      navigate('/orders');
+      
+    //  console.log("Updated Redux State:", currentOrder);
       setButtonLoad(false);
       // Clear the cart and update the UI
       setReload(!reload);
+      
     } catch (err) {
       dispatch(
         openSnackbar({
@@ -220,9 +232,6 @@ const Cart = () => {
     }
   };
 
-  useEffect(() => {
-    getProducts();
-  }, [reload]);
 
   const addCart = async (id) => {
     const token = localStorage.getItem("foodeli-app-token");
@@ -432,7 +441,7 @@ const Cart = () => {
                     </div>
                   </Delivery>
                   <Button
-                    text="Pace Order"
+                    text="Place Order"
                     small
                     onClick={PlaceOrder}
                     isLoading={buttonLoad}

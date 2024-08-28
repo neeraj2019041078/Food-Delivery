@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { createError } from "../error.js";
 import User from "../models/User.js";
-// import Orders from "../models/Orders.js";
+import Orders from "../models/Orders.js";
 // import { verifyToken } from "../middleware/verifyUser.js";
 
 dotenv.config();
@@ -138,9 +138,14 @@ export const addToCart = async (req, res, next) => {
 
 export const placeOrder = async (req, res, next) => {
     try {
+
       const { products, address, totalAmount } = req.body;
+ 
       const userJWT = req.user;
+      
+   
       const user = await User.findById(userJWT.id);
+     
   
       const order = new Orders({
         products,
@@ -148,13 +153,22 @@ export const placeOrder = async (req, res, next) => {
         total_amount: totalAmount,
         address,
       });
-  
+      // console.log(order)
       await order.save();
       user.cart = [];
       await user.save();
       return res
         .status(200)
         .json({ message: "Order placed successfully", order });
+    } catch (err) {
+      next(err);
+    }
+  };
+  export const getOrders = async (req, res, next) => {
+    try {
+      const userId = req.user.id; // Get the user ID from the JWT token
+      const orders = await Orders.find({ user: userId });
+      res.status(200).json(orders);
     } catch (err) {
       next(err);
     }

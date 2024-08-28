@@ -1,6 +1,6 @@
 import axios from "axios";
 const API = axios.create({
-  baseURL: "https://food-delivery-7240.onrender.com/api/",
+  baseURL: "http://localhost:8080/api/",
 });
 
 //auth
@@ -56,3 +56,10 @@ export const getOrders = async (token) =>
   await API.get(`/user/order/`, {
     headers: { Authorization: `Bearer ${token}` },
   });
+
+  export const getOrder = async (token) =>
+    await API.get(`/user/allorderplace/`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  
+    

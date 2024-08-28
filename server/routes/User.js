@@ -10,6 +10,7 @@ import {
   placeOrder,
   removeFromCart,
   removeFromFavorites,
+  getOrders
 } from "../controllers/User.js";
 import { verifyToken } from "../middleware/verifyUser.js";
 const router = express.Router();
@@ -27,5 +28,6 @@ router.patch("/favorite", verifyToken, removeFromFavorites);
 
 router.post("/order", verifyToken, placeOrder);
 router.get("/order", verifyToken, getAllOrders);
+router.get("/allorderplace",verifyToken, getOrders)
 
 export default router;
