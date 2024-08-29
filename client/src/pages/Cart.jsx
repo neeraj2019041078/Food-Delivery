@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import TextInput from "../components/TextInput";
 import Button from "../components/Button";
-import { addToCart, deleteFromCart, getCart, placeOrder } from "../api";
+import { addToCart, deleteFromCart, getCart, placeOrder,getOrder } from "../api";
 import { useNavigate } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 import { useDispatch , useSelector } from "react-redux";
@@ -232,7 +232,22 @@ const Cart = () => {
     }
   };
 
+  useEffect(() => {
+    getProducts();
+  }, [reload]);
+  // useEffect(() => {
+  //   const fetchOrders = async () => {
+  //     try {
+  //       const token = localStorage.getItem('foodeli-app-token');
+  //       const orders = await getOrder(token);
+  //       console.log('Fetched orders:', orders);
+  //     } catch (error) {
+  //       console.error('Failed to fetch orders:', error);
+  //     }
+  //   };
 
+  //   fetchOrders();
+  // }, []);
   const addCart = async (id) => {
     const token = localStorage.getItem("foodeli-app-token");
     await addToCart(token, { productId: id, quantity: 1 })
