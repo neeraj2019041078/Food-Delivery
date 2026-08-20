@@ -19,9 +19,13 @@ jobs:
           node-version: 20
       - run: npm install
       - run: npm test
+        env:
+          EMERGENT_API_KEY: ${{ secrets.EMERGENT_API_KEY }}
 
   build-client:
     runs-on: ubuntu-latest
+    env:
+      CI: false
     defaults:
       run:
         working-directory: ./client
@@ -32,5 +36,3 @@ jobs:
           node-version: 20
       - run: npm install
       - run: npm run build
-        env:
-          CI: false
