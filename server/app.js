@@ -2,12 +2,16 @@ import express from "express";
 import cors from "cors";
 import UserRoutes from "./routes/User.js";
 import FoodRoutes from "./routes/Food.js";
+import aiRoute from './routes/aiRoute.js';
+// ... baaki imports
+
+
 
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
-
+app.use('/api/ai', aiRoute);
 app.use("/api/user/", UserRoutes);
 app.use("/api/food/", FoodRoutes);
 
