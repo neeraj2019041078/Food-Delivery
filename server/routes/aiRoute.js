@@ -3,10 +3,17 @@ import OpenAI from 'openai';
 
 const router = express.Router();
 
-const client = new OpenAI({
-  apiKey: process.env.EMERGENT_API_KEY,
-  baseURL: 'https://integrations.emergentagent.com/llm/v1',
-});
+let client = null;
+
+function getClient() {
+  if (!client) {
+    client = new OpenAI({
+      apiKey: process.env.EMERGENT_API_KEY,
+      baseURL: 'https://integrations.emergentagent.com/llm/v1',
+    });
+  }
+  return client;
+}
 
 router.post('/chat', async (req, res) => {
   try {
@@ -16,7 +23,7 @@ router.post('/chat', async (req, res) => {
       return res.status(400).json({ error: 'message is required' });
     }
 
-    const resp = await client.chat.completions.create({
+    const resp = await getClient().chat.completions.create({
       model: 'gpt-5.2',
       messages: [{ role: 'user', content: message }],
     });
